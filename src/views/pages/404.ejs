@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+
+<html class="no-js">
+    <head>
+        <%- include("../components/_head") %> 
+    </head>
+    <body>
+
+        <div id="preloader">
+            <div id="status">&nbsp;</div>
+        </div>
+        <header>
+            <%- include("../components/header") %> 
+            <%- include("../components/nav") %> 
+        </header>
+      
+        <div class="content-area error-page" style="background-color: #FCFCFC; padding-bottom: 55px;">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-10 col-md-offset-1 col-sm-12 text-center page-title">
+                        <h2 class="error-title">404</h2>
+                        <p>Lo sentimos, la página que intenta visitar ha sido movida o eliminada</p>
+                        <a href="/" class="btn btn-default">Inicio</a>                        
+                    </div>
+                </div> 
+            </div>
+        </div> 
+
+        <footer>
+            <%- include("../components/footer") %> 
+        </footer>
+
+    </body>
+</html>
