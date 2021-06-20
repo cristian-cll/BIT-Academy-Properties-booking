@@ -1,4 +1,5 @@
 module.exports = {
-    property: require("./property")
+    property: require("./property"),
+    
     
 }

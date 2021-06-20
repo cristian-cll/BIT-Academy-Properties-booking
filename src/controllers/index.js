@@ -1,4 +1,5 @@
 const {PropertyModel} = require("../models/property")
+const Booking = require("../models/booking")
 
 
 exports.home = async (req, res) => {
@@ -22,15 +23,41 @@ exports.about = (req, res,) => {
 
 exports.search = async (req, res, next) => {
 
-    const {title, city, apartment, hotel} = req.query
-    const query= {}
+    const checkIn = req.query.date_in
+    const checkOut = req.query.date_out
+    
+    // Busca primero las propiedades ocupadas según FECHA
+    let occupiedPropertiesId = [];
+    //Evitar mal dato en la query intencionado
+    try{
+        const confirmedBookings = await Booking.find({
 
-    //Condiciones filtros    
-    title && (query["title"] = new RegExp(title,'i'))
-    city && (query["address.city"] = city)
-    apartment && !hotel && (query["__t"] = "Apartamento")
-    !apartment && hotel && (query["__t"] = "Hotel")
+            $or: [
+                {$and: [
+                  {checkIn:{$gte: new Date(checkIn)}}, {checkIn:{$lte: new Date(checkIn)}}
+                ]},
+                {checkIn:{$lte: new Date(checkIn)}, checkOut:{$gte:  new Date(checkOut)}}
+             ]
 
+        })
+        confirmedBookings.map(confirmedBooking => occupiedPropertiesId.push(confirmedBooking.property._id));
+    }
+    catch (err) {
+        console.error('Search', err.message);
+    }
+    //Ejecuta lo siguiente, si lo anterior funciona o no
+    finally {
+
+
+    const {title, city, apartment, hotel} = req.query;
+    const query= {};
+
+    //Condiciones - filtros    
+    title && (query["title"] = new RegExp(title,'i'));
+    city && (query["address.city"] = city);
+    apartment && !hotel && (query["__t"] = "Apartamento");
+    !apartment && hotel && (query["__t"] = "Hotel");
+    query["_id"] = { $nin: occupiedPropertiesId } // No incluídas las prop. resevadas
 
 
 
@@ -41,8 +68,7 @@ exports.search = async (req, res, next) => {
     let perPage = req.query.limit;
     let page = req.query.page || 1;
 
-    const PropertyListCount = await PropertyModel.find(query).count()
-    ;
+    const PropertyListCount = await PropertyModel.find(query).count();
     
     const pagination = {
         total : PropertyListCount,
@@ -73,6 +99,8 @@ exports.search = async (req, res, next) => {
           url,
           perPage,
         });
+
+    }// End finally
 
 }
 

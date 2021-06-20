@@ -2,7 +2,6 @@ const util = require('util');
 const mongoose = require('mongoose');  
 const Schema = mongoose.Schema;  
 
-
 const BaseSchema = function() {  
     Schema.apply(this, arguments);
 
@@ -44,14 +43,10 @@ const BaseSchema = function() {
     })
 }
 
-
 util.inherits(BaseSchema, Schema);
 
 const PropertySchema = new BaseSchema();
-
-
 const PropertyModel = mongoose.model("Property", PropertySchema)
-
 
 module.exports = {
     BaseSchema,

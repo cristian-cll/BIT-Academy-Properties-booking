@@ -105,6 +105,20 @@
                                                         <% } %>
                                                     <% } %>  
                                                 </div>
+                                                <div class="row">
+                                                    <div class="col-xs-12">  
+                                                        <input class="button btn-primary" 
+                                                            <% if(user) { %>
+                                                                onclick="window.location.href='/booking/?id=<%= property._id%>' + '&date_in=' + date_in + '&date_out=' + date_out"
+                                                            <% } else { %>  
+                                                                onclick="window.location.href='/booking/?id=<%= property._id%>' + '&date_in=' + date_in + '&date_out=' + date_out"
+                                   
+                                                                 
+                                                      
+                                                            <% } %> 
+                                                            value="Reservar" type="submit">
+                                                    </div>  
+                                                </div>
                                             </div>
                                         </div>
                                     </div> 
@@ -408,6 +422,14 @@
                 let url = window.location.href.replace(/&limit=\d/g, "");
                 window.location.assign(`${url}&limit=${e.target.value}`)
             })
+
+
+            // Parseamos la url para obtener las fechas y enviarlas para la reserva
+            const url_string = window.location.href
+            const url = new URL(url_string);
+            const date_in = url.searchParams.get("date_in");
+            const date_out = url.searchParams.get("date_out");
+            
         </script>
     </body>
 </html>

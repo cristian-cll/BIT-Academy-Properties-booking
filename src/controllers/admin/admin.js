@@ -80,9 +80,38 @@ exports.createProperty = async (req, res) => {
 }
 
 
+exports.cpanel = (req, res) => {
+    res.render("pages/admin/index");
+}
+
+
+exports.renderAdminLogin = (req, res) => {
+    res.render("pages/admin/login");
+}
+
+
+exports.adminLogin = (req, res) => {
+    const {username, password} = req.body;
+    res.render("pages/admin/login");
+}
+
+
+exports.adminLogout = (req, res) => {
+    res.render("pages/admin/login");
+}
+
+
+
+
+
+
+
 
 
 exports.editProperty 
+
+
+
 
 
 
