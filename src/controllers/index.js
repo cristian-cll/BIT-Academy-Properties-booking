@@ -1,6 +1,5 @@
 const {PropertyModel} = require("../models/property")
-const Booking = require("../models/booking")
-
+const {Booking} = require("../models/index")
 
 exports.home = async (req, res) => {
     try{
@@ -10,10 +9,11 @@ exports.home = async (req, res) => {
         res.render("pages/index",{
             allProperties : listProperties,
         })
-    } catch (error) {
+
+    } 
+    catch (error) {
         console.log(error);
     }
-
 }
 
 exports.about = (req, res,) => {
@@ -23,21 +23,30 @@ exports.about = (req, res,) => {
 
 exports.search = async (req, res, next) => {
 
+    // Busca primero las propiedades ocupadas según FECHA
     const checkIn = req.query.date_in
     const checkOut = req.query.date_out
     
-    // Busca primero las propiedades ocupadas según FECHA
     let occupiedPropertiesId = [];
-    //Evitar mal dato en la query intencionado
+    
+    //Evitar mal dato intencionado en la query 
+    // Si la checkIn es mayor o igual que checkout 
+
+    if(checkIn >= checkOut){
+        console.log("checkIn mayor o igual que checkout ");
+        return res.redirect("/")
+    }
     try{
         const confirmedBookings = await Booking.find({
 
-            $or: [
+              $or: [
+                {checkIn: {$gte:  new Date(checkIn), $lte: new Date(checkOut)}},
+                {checkOut: {$gte:  new Date(checkIn), $lte: new Date(checkOut)}},
                 {$and: [
-                  {checkIn:{$gte: new Date(checkIn)}}, {checkIn:{$lte: new Date(checkIn)}}
-                ]},
-                {checkIn:{$lte: new Date(checkIn)}, checkOut:{$gte:  new Date(checkOut)}}
-             ]
+                  {checkIn: {$lt:  new Date(checkIn)}},
+                  {checkOut: {$gt: new Date(checkOut)}}
+                ]}
+            ]
 
         })
         confirmedBookings.map(confirmedBooking => occupiedPropertiesId.push(confirmedBooking.property._id));
@@ -48,7 +57,7 @@ exports.search = async (req, res, next) => {
     //Ejecuta lo siguiente, si lo anterior funciona o no
     finally {
 
-
+    //************************************* Búsqueda *************************************
     const {title, city, apartment, hotel} = req.query;
     const query= {};
 
@@ -60,15 +69,15 @@ exports.search = async (req, res, next) => {
     query["_id"] = { $nin: occupiedPropertiesId } // No incluídas las prop. resevadas
 
 
+    const PropertyListCount = await PropertyModel.find(query).count();
 
 
-    //***************************/ Paginación *************************************
+    //************************************* Paginación *************************************
     const url = req._parsedOriginalUrl.search.replace(/&page=\d/g, "");
 
     let perPage = req.query.limit;
     let page = req.query.page || 1;
 
-    const PropertyListCount = await PropertyModel.find(query).count();
     
     const pagination = {
         total : PropertyListCount,

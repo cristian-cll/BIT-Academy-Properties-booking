@@ -1,19 +1,20 @@
 const express = require ("express");
 const router = express.Router();
 const adminController = require("../controllers/admin/admin")
-//const {isAdminAuthenticated} = require("../helpers/auth")
 
-//Endpoints about the general functions of the site.
+// Protegemos rutas para el amdin
+const {isAdminAuthenticated} = require("../helpers/auth")
 
-router.get("/", adminController.cpanel);
 
-router.get("/add-new", adminController.createPropertyPage);
+router.get("/", isAdminAuthenticated, adminController.cpanel);
 
-router.post("/add-new", adminController.createProperty);
+router.get("/add-new", isAdminAuthenticated, adminController.renderNewPropertyPage);
 
-router.get("/:type/:type-edit", adminController.createPropertyPage);
+router.post("/add-new", isAdminAuthenticated, adminController.createProperty);
 
-router.post("/:type/:type-edit", adminController.createPropertyPage);
+router.get("/:type/:type-edit", isAdminAuthenticated, adminController.renderNewPropertyPage);
+
+router.post("/:type/:type-edit", isAdminAuthenticated, adminController.renderNewPropertyPage);
 
 
 

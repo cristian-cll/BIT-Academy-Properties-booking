@@ -1,7 +1,5 @@
-const Booking = require("../../models/booking")
 const {PropertyModel} = require('../../models/property');
-const User = require('../../models/user'); 
-
+const {User, Booking} = require("../../models/index")
 
 // Renderiza la pagina para reservar
 exports.renderBookingPage = async (req, res,) => {

@@ -1,8 +1,6 @@
-const Apartment = require("../../models/apartment")
-const Room = require("../../models/room")
+const {Apartment, Room} = require("../../models/index")
 
-
-exports.createPropertyPage = (req, res) => {
+exports.renderNewPropertyPage = (req, res) => {
     res.render("pages/admin/create-property");
 }
 
@@ -13,11 +11,11 @@ exports.cpanel = (req, res) => {
 exports.createProperty = async (req, res) => {
 
     const {castBooleanCheck} = require("../../helpers/functions.js");
-    
-    let property = {
-        //...req.body
+    [...req.body]
 
-        title: req.body.title,
+    const property = {
+        
+        title: title,
         type: req.body.type,
         price: req.body.price,
         currency: req.body.currency,
@@ -48,9 +46,8 @@ exports.createProperty = async (req, res) => {
                       closet: castBooleanCheck(req.body.closet),
                       emergency_exit: castBooleanCheck(req.body.emergency_exit)
                     },
-
     }
-    console.log(property);
+
     if (req.body.type === "Apartamento") {
 
         const apartment = new Apartment({
@@ -62,12 +59,11 @@ exports.createProperty = async (req, res) => {
 
         await apartment.save();
 
-        
         return res.json("Propiedad creada")
     }
     else if(req.body.type === "Hotel") {
 
-        const hotelroom = new HotelRoom({
+        const hotelroom = new Room({
             ...property,
             beds: {
                 number: parseInt(req.body.beds)

@@ -1,6 +1,5 @@
 const passport = require("passport")
-const User = require("../../models/user")
-const Booking = require("../../models/booking")
+const {User, Booking} = require("../../models/index")
 
 // Renderiza la pagina de logueo
 exports.renderUserLoginSignUp = (req, res) => {

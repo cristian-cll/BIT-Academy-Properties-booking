@@ -1,5 +1,6 @@
 module.exports = {
-    property: require("./property"),
-    
-    
+    Booking: require("./booking"),
+    User: require("./user"),
+    Apartment: require("./apartment"),
+    Room: require("./room"),
 }
