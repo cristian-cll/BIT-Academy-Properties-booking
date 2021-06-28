@@ -7,9 +7,7 @@ const RoomSchema = new BaseSchema({
     type: { type: String,
         enum: ["Single", "Double", "Triple"] 
       },
-    guests: Number,
     beds: Number,
-    baths: Number,
     services: {
         wakeup: { type: Boolean, default: false },
         cleaning: { type: Boolean, default: false },

@@ -4,7 +4,7 @@
         <div class="container">
             <div class="row">
 
-                <div class="col-md-3 col-sm-6 wow fadeInRight animated">
+                <div class="col-md-4 col-sm-6 wow fadeInRight animated">
                     <div class="single-footer">
                         <h4>Nosotros </h4>
                         <div class="footer-title-line"></div>
@@ -18,11 +18,24 @@
                         </ul>
                     </div>
                 </div>
-                <div class="col-md-3 col-sm-6 wow fadeInRight animated">
+                <div class="col-md-4 col-sm-6 wow fadeInRight animated">
                     <div class="single-footer">
                         <h4>Acceso rápido </h4>
                         <div class="footer-title-line"></div>
                         <ul class="footer-menu">
+                            <%  if(user){%> 
+                                <li class="dropdown ymm-sw " data-wow-delay="0.1s">
+                                    <a href="index.html" class="dropdown-toggle active" data-toggle="dropdown" data-hover="dropdown" data-delay="200"><%= user.username %> <b class="caret"></b></a>
+                                    <ul class="dropdown-menu navbar-nav">
+                                        <li>
+                                            <a href="/user/profile">Perfil</a>
+                                        </li>
+                                        <li>
+                                            <a href="/user/logout">Salir</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            <% } %> 
                             <li><a href="properties.html">Properties</a>  </li> 
                             <li><a href="#">Services</a>  </li> 
                             <li><a href="submit-property.html">Submit property </a></li> 
@@ -32,32 +45,7 @@
                         </ul>
                     </div>
                 </div>
-                <div class="col-md-3 col-sm-6 wow fadeInRight animated">
-                    <div class="single-footer">
-                        <h4>Últimas novedades</h4>
-                        <div class="footer-title-line"></div>
-                        <ul class="footer-blog">
-
-                    
-                            <li>
-                                <div class="col-md-3 col-sm-4 col-xs-4 blg-thumb p0">
-                                    <a href="single.html">
-                                        <img src="/assets/img/demo/small-proerty-2.jpg">
-                                    </a>
-                                    <span class="blg-date">12-12-2016</span>
-                                </div>
-                                <div class="col-md-8  col-sm-8 col-xs-8  blg-entry">
-                                    <h6> <a href="single.html"></a>swwedw</h6>
-                                    <p style="line-height: 17px; padding: 8px 2px;">Lorem ipsum dolor sit amet, nulla ...</p>
-                                </div>
-                            </li> 
-          
-
-
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-md-3 col-sm-6 wow fadeInRight animated">
+                <div class="col-md-4 col-sm-6 wow fadeInRight animated">
                     <div class="single-footer news-letter">
                         <h4>Suscripción</h4>
                         <div class="footer-title-line"></div>

@@ -12,11 +12,11 @@ router.get("/add-new", isAdminAuthenticated, adminController.renderNewPropertyPa
 
 router.post("/add-new", isAdminAuthenticated, adminController.createProperty);
 
-router.get("/:type/:type-edit", isAdminAuthenticated, adminController.renderNewPropertyPage);
+router.get("/edit/:id", isAdminAuthenticated, adminController.renderEditProperty);
 
-router.post("/:type/:type-edit", isAdminAuthenticated, adminController.renderNewPropertyPage);
+router.post("/edit", isAdminAuthenticated, adminController.editProperty);
 
-
+router.get("/delete/:id", isAdminAuthenticated, adminController.deleteProperty); //Eliminar la propiedad
 
 
 router.get("/login", adminController.renderAdminLogin);

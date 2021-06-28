@@ -9,5 +9,7 @@ router.get("/booking/", bookingController.renderBookingPage);
 
 router.post("/booking/", bookingController.createBooking);
 
+router.get("/booking/:id/delete", bookingController.deleteBooking)
+
 
 module.exports = router;

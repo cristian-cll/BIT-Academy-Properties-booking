@@ -37,10 +37,10 @@
                     <div class="wizard-container"> 
 
                         <div class="wizard-card ct-wizard-orange" id="wizardProperty">
-                            <form action="/admin/add-new" method="POST">                        
+                            <form   action="<% if(property){ %>/admin/edit<% }else{ %>/admin/add-new<% } %>" method="POST">                        
                                 <div class="wizard-header">
                                     <h3>
-                                        <b>Añadir</b> ALOJAMIENTO <br>
+                                        <% if(property){ %> <b>Editar</b> <% } else { %> <b>Añadir</b> <% } %>ALOJAMIENTO <br>
                                         <small>Complete el formulario para insertar nuevo documento en la base de datos.</small>
                                     </h3>
                                 </div>
@@ -49,147 +49,160 @@
                                     <li><a href="#step1" data-toggle="tab">Paso 1 </a></li>
                                     <li><a href="#step2" data-toggle="tab">Paso 2 </a></li>
                                     <li><a href="#step3" data-toggle="tab">Paso 3 </a></li>
-                                    <li><a href="#step4" data-toggle="tab">Final</a></li>
+                                    <li><a href="#step4" data-toggle="tab">Paso 4 </a></li>
+                                    <li><a href="#step5" data-toggle="tab">Final</a></li>
                                 </ul>
 
                                 <div class="tab-content">
 
+                                    <!--  step 1 -->
                                     <div class="tab-pane" id="step1">
-                                        <div class="row p-b-15  ">
+                                        <div class="row p-b-15">
                                             <h4 class="info-text"> Empecemos por una información básica</h4>
                                             <div class="col-sm-5 col-sm-offset-1">
+                                                <input style="display: none" name="id" type="text" class="form-control" <% if(property){ %> value="<%= property._id %>" <% } %> >
                                                 <div class="form-group">
                                                     <label>Nombre alojamiento <small>(obligatorio)</small></label>
-                                                    <input name="title" type="text" class="form-control" placeholder="Super villa ..." >
+                                                    <input name="title" type="text" class="form-control" placeholder="Super villa ..." <% if(property){ %> value="<%= property.title %>" <% } %> required>
                                                 </div>
                                                 <div class="form-group">
                                                     <label>Tipo de alojamiento <small>(obligatorio)</small></label>
                                                     <select id="propertyType" name="type" class="selectpicker" data-live-search="true" data-live-search-style="begins" title="Seleccione tipo" required>
-                                                        <option>Hotel</option>
-                                                        <option>Apartamento</option>
+                                                        <% if(property && property.__t ==="Hotel"){ %>
+                                                            <option selected>Hotel</option>  
+                                                            <option>Apartamento</option>  
+                                                        <% } else if(property && property.__t ==="Apartamento"){ %>
+                                                            <option>Hotel</option>  
+                                                            <option selected>Apartamento</option> 
+                                                        <% } else { %>
+                                                            <option>Hotel</option>  
+                                                            <option>Apartamento</option> 
+                                                        <% } %>
                                                     </select>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label>Estado alojamiento :</label>
-                                                    <select name="availability" class="selectpicker show-tick form-control">
-                                                        <option> -Estado- </option>
-                                                        <option>Disponible</option>
-                                                        <option>No disponible</option>
-                                                        <option>Baja</option>  
+                                                    <label>Estado alojamiento <small>(obligatorio)</small></label>
+                                                    <select name="availability" class="form-control" required>
+                                                        <% if(property && property.availability === "Disponible"){ %>
+                                                            <option selected>Disponible</option>
+                                                            <option>No disponible</option>
+                                                        <% } else if(property && property.availability === "No disponible"){ %>
+                                                            <option >Disponible</option>
+                                                            <option selected>No disponible</option>
+                                                        <% } else { %>
+                                                            <option >Disponible</option>
+                                                            <option selected>No disponible</option>
+                                                        <% } %> 
                                                     </select>
                                                 </div>
                                             </div>
                                             <div class="col-sm-5">
                                                 <div class="form-group">
                                                     <label>Precio/noche <small>(obligatorio)</small></label>
-                                                    <input name="price" type="text" class="form-control" placeholder="35">
+                                                    <input name="price" type="text" class="form-control" placeholder="35" <% if(property){ %> value="<%= property.price %>" <% } %> >
                                                 </div>
                                                 <div class="form-group">
                                                     <label>Moneda <small>(obligatorio)</small></label>
-                                                    <input name="currency" type="text" class="form-control" placeholder="EUR">
+                                                    <input name="currency" type="text" class="form-control" placeholder="EUR" <% if(property){ %> value="<%= property.currency %>" <% } %> >
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Area útil <small>(obligatorio)</small></label>
+                                                    <input name="area" type="number" class="form-control" placeholder="m2" <% if(property){ %> value="<%= property.area %>" <% } %> >
                                                 </div> 
-                                            
                                             </div>
                                         </div>
+                                        <!--  Owner data -->
+                                        
                                         <div class="col-sm-12 padding-top-15">
-                                            <p>Propiertario </p> 
+                                            <h5 class="info-text"> Propietario</h5>
                                         </div>
-                                        <div class="row p-b-15 ">
+                                        <div class="row p-b-15">
                                             <div class="col-sm-5 col-sm-offset-1">
                                                 <div class="form-group">
-                                                    <label>Propiertario <small>(obligatorio)</small></label>
-                                                    <input name="owner" type="text" class="form-control">
+                                                    <label>Propietario <small>(obligatorio)</small></label>
+                                                    <input name="owner" type="text" class="form-control" <% if(property){ %> value="<%= property.owner %>" <% } %> >
                                                 </div>
                                             </div>
                                             <div class="col-sm-5">
                                                 <div class="form-group">
                                                     <label>Teléfono <small>(obligatorio)</small></label>
-                                                    <input name="phone" type="text" class="form-control" placeholder="+1 473 843 7436">
+                                                    <input name="phone" type="text" class="form-control" placeholder="+1 473 843 7436" <% if(property){ %> value="<%= property.phone %>" <% } %> >
                                                 </div>
                                             </div>
                                         </div>
-
-                                            
-
                                         
 
                                         
-
-
+                                    </div>
+                                    <!--  End step 1 -->
+                                    
+                                    <!--  step 2 -->
+                                    <div class="tab-pane" id="step2">
+                                        <h4 class="info-text">Dónde está y que nos ofrece?</h4>
+                                        <div class="row">
                                             <div class="col-sm-12 padding-top-15">
-                                                <p>Dirección</p> 
+                                                <h5 class="info-text"> Dirección</h5>
                                             </div>
                                             <div class="col-sm-12">
-                                                <div class="col-sm-3">
+
+                                                <% if(property){ %> 
+                                                    <div id="infoLocation">
+                                                        <div class="col-sm-12">
+                                                            <p>La ubicación actual es <%= property.address.city %>, <%= property.address.district %>  
+                                                            <input id="currentProv" type="text" name="city" value="<%= property.address.city %>" hidden>
+                                                            <input id="currentMun" type="text" name="district" value="<%= property.address.district %>" hidden><a onclick="onChangeLocation()"> Cambiar</a>
+                                                        </div>
+                                                    </div>
+                                                <% } %>
+
+                                                <div id="province" class="col-sm-3" <% if(property){ %> style="display: none" <% } %> >
                                                     <div class="form-group">
-                                                        <label>Provincia:</label>
-                                                        <select id="ps-prov" name="city" class="selectpicker" data-live-search="true" data-live-search-style="begins" title="Seleccione ciudad">
+                                                        <label>Provincia <small>(obligatorio)</small></label>
+                                                        <select id="ps-prov" <% if(!property){ %> name="city" <% } %> class="selectpicker" data-live-search="true" data-live-search-style="begins"  <% if(!property){ %> required <% } %> > 
                                                         </select>
                                                     </div>
                                                 </div>
-                                                <div class="col-sm-3">
+                                                <div id="municipe" class="col-sm-3" <% if(property){ %> style="display: none" <% } %>>
                                                     <div class="form-group">
-                                                        <label>Localidad :</label>
-                                                        <select id="ps-mun" name="borough" class="selectpicker" data-live-search="true" data-live-search-style="begins" title="Seleccione localidad">
+                                                        <label>Localidad <small>(obligatorio)</small></label>
+                                                        <select id="ps-mun" <% if(!property){ %> name="district" <% } %> class="form-control" data-live-search="true" data-live-search-style="begins" title="Seleccione localidad" <% if(!property){ %> required <% } %> >
                                                         </select>
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-6">
                                                     <label>Dirección <small>(obligatorio)</small></label>
-                                                    <input name="street" type="text" class="form-control" placeholder="+1 473 843 7436">
+                                                    <input name="street" type="text" class="form-control" placeholder="calle Sepúlveda, 54" <% if(property){ %> value="<%= property.address.street %>" <% } %> required>
                                                 </div>
                                             </div>
                                             <div class="col-sm-12 padding-top-15">
-                                                <p>Descripción </p> 
-                                            </div>
-                                            <div class="col-sm-12"> 
-                                                <div class="form-group">
-                                                    <label>Descripión alojamiento :</label>
-                                                    <textarea name="description" class="form-control" ></textarea>
-                                                </div> 
-                                            </div>    
-                                        </dir>
-                                    </div>
-                                    <!--  End step 1 -->
-
-                                    <div class="tab-pane" id="apartment">
-                                        <h4 class="info-text">Apartamento. Dónde está y que nos ofrece? </h4>
-                                        <div class="row">
-                                            
-                                            <div class="col-sm-12 padding-top-15">                                                   
-    
-                                                <div class="col-sm-4">
-                                                    <div class="form-group">
-                                                        <label for="price-range">Habitaciones :</label>
-                                                        <input type="text" class="span2" name="rooms" data-slider-min="0" 
-                                                               data-slider-max="20" data-slider-step="1" 
-                                                               data-slider-value="0" id="min-baths" ><br />
-                                                        <b class="pull-left color">1</b> 
-                                                        <b class="pull-right color">20</b>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-4">
-                                                    <div class="form-group">
-                                                        <label for="property-geo">Espacio (m2) :</label>
-                                                        <input type="text" class="span2" name="area" data-slider-min="0" 
-                                                               data-slider-max="240" data-slider-step="1" 
-                                                               data-slider-value="0" id="property-geo" ><br />
-                                                        <b class="pull-left color">5 m</b> 
-                                                        <b class="pull-right color">240 m</b>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            
-                                            <div class="col-sm-12 padding-top-15">
-                                                <p>Comodidades</p> 
+                                                <h5 class="info-text"> Descripción</h5>
                                             </div>
                                             <div class="col-sm-12">
+                                                <div class="col-sm-9">
+                                                    <div class="form-group">
+                                                        <label>Descripción alojamiento </label>
+                                                        <textarea name="description" class="form-control"><% if(property){ %><%= property.description %><% } %></textarea>
+                                                    </div>
+                                                </div> 
+                                                <div class="col-sm-3">
+                                                    <div class="form-group">
+                                                        <label>Capacidad <small>(obligatorio)</small></label>
+                                                        <input name="capacity"  min="1" type="number" class="form-control" <% if(property){ %> value="<%= property.capacity %>" <% } %>>
+                                                    </div> 
+                                                </div>
+                                            </div>         
 
+                                            <!--  Amenities -->
+                                            <div class="col-sm-12 padding-top-15">
+                                                <h5 class="info-text"> Comodidades</h5>
+                                            </div>
+                                            <div class="col-sm-12">
+                                                     
                                                 <div class="col-sm-3">
                                                     <div class="form-group">
                                                         <div class="checkbox">
                                                             <label>
-                                                                <input type="checkbox"  name="air_condition"> Aire acondicionado
+                                                                <input type="checkbox" <% if(property && property.amenities.air_conditioner === true) {%> checked <% } %> name="air_conditioner"> Aire acondicionado
                                                             </label>
                                                         </div>
                                                     </div>
@@ -198,7 +211,7 @@
                                                     <div class="form-group">
                                                         <div class="checkbox">
                                                             <label>
-                                                                <input type="checkbox"  name="heating"> Calefacción
+                                                                <input type="checkbox" <% if(property && property.amenities.heating === true) {%> checked <% } %>  name="heating"> Calefacción
                                                             </label>
                                                         </div>
                                                     </div>
@@ -207,7 +220,7 @@
                                                     <div class="form-group">
                                                         <div class="checkbox">
                                                             <label>
-                                                                <input type="checkbox"  name="wc_private"> Baño privado
+                                                                <input type="checkbox" <% if(property && property.amenities.wc_private === true) {%> checked <% } %> name="wc_private"> Baño privado
                                                             </label>
                                                         </div>
                                                     </div>
@@ -216,7 +229,7 @@
                                                     <div class="form-group">
                                                         <div class="checkbox">
                                                             <label>
-                                                                <input type="checkbox"  name="wash_maschine"> Lavadora
+                                                                <input type="checkbox" <% if(property && property.amenities.wash_machine === true) {%> checked <% } %>  name="wash_machine"> Lavadora
                                                             </label>
                                                         </div>
                                                     </div>
@@ -225,7 +238,7 @@
                                                     <div class="form-group">
                                                         <div class="checkbox">
                                                             <label>
-                                                                <input type="checkbox"  name="tv"> Tv
+                                                                <input type="checkbox" <% if(property && property.amenities.tv === true) {%> checked <% } %> name="tv"> Tv
                                                             </label>
                                                         </div>
                                                     </div>
@@ -234,7 +247,7 @@
                                                     <div class="form-group">
                                                         <div class="checkbox">
                                                             <label>
-                                                                <input type="checkbox"  name="wifi"> Wi-fi
+                                                                <input type="checkbox" <% if(property && property.amenities.wifi === true) {%> checked <% } %> name="wifi"> Wi-fi
                                                             </label>
                                                         </div>
                                                     </div>
@@ -243,7 +256,7 @@
                                                     <div class="form-group">
                                                         <div class="checkbox">
                                                             <label>
-                                                                <input type="checkbox"  name="dryer"> Secador
+                                                                <input type="checkbox" <% if(property && property.amenities.dryer === true) {%> checked <% } %>  name="dryer"> Secador
                                                             </label>
                                                         </div>
                                                     </div>
@@ -252,7 +265,7 @@
                                                     <div class="form-group">
                                                         <div class="checkbox">
                                                             <label>
-                                                                <input type="checkbox" name="swimming_pool"> Piscina
+                                                                <input type="checkbox" <% if(property && property.amenities.swimming_pool === true) {%> checked <% } %> name="swimming_pool"> Piscina
                                                             </label>
                                                         </div>
                                                     </div>
@@ -261,7 +274,7 @@
                                                     <div class="form-group">
                                                         <div class="checkbox">
                                                             <label>
-                                                                <input type="checkbox" name="balcony"> Balcón
+                                                                <input type="checkbox" <% if(property && property.amenities.balcony === true) {%> checked <% } %> name="balcony"> Balcón
                                                             </label>
                                                         </div>
                                                     </div>
@@ -270,7 +283,7 @@
                                                     <div class="form-group">
                                                         <div class="checkbox">
                                                             <label>
-                                                                <input type="checkbox" name="terrace"> Terraza
+                                                                <input type="checkbox" <% if(property && property.amenities.terrace === true) {%> checked <% } %> name="terrace"> Terraza
                                                             </label>
                                                         </div>
                                                     </div>
@@ -279,7 +292,7 @@
                                                     <div class="form-group">
                                                         <div class="checkbox">
                                                             <label>
-                                                                <input type="checkbox" name="exterior_views"> Vistas exteriores
+                                                                <input type="checkbox" <% if(property && property.amenities.exterior_views === true) {%> checked <% } %> name="exterior_views"> Vistas exteriores
                                                             </label>
                                                         </div>
                                                     </div>
@@ -288,7 +301,7 @@
                                                     <div class="form-group">
                                                         <div class="checkbox">
                                                             <label>
-                                                                <input type="checkbox" name="interior_views"> Vistas interiores
+                                                                <input type="checkbox" <% if(property && property.amenities.interior_views === true) {%> checked <% } %> name="interior_views"> Vistas interiores
                                                             </label>
                                                         </div>
                                                     </div>
@@ -297,7 +310,7 @@
                                                     <div class="form-group">
                                                         <div class="checkbox">
                                                             <label>
-                                                                <input type="checkbox" name="closet"> Armario
+                                                                <input type="checkbox" <% if(property && property.amenities.closet === true) {%> checked <% } %> name="closet"> Armario
                                                             </label>
                                                         </div>
                                                     </div>
@@ -306,7 +319,7 @@
                                                     <div class="form-group">
                                                         <div class="checkbox">
                                                             <label>
-                                                                <input type="checkbox" name="emergency_exit"> Salida emergencia
+                                                                <input type="checkbox" <% if(property && property.amenities.emergency_exit === true) {%> checked <% } %> name="emergency_exit"> Salida emergencia
                                                             </label>
                                                         </div>
                                                     </div>
@@ -315,22 +328,41 @@
                                                     <div class="form-group">
                                                         <div class="checkbox">
                                                             <label>
-                                                                <input type="checkbox" name="fire_detector"> Detector de incendios 
+                                                                <input type="checkbox" <% if(property && property.amenities.fire_detector === true) {%> checked <% } %> name="fire_detector"> Detector de incendios 
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <div class="form-group">
+                                                        <div class="checkbox">
+                                                            <label>
+                                                                <input type="checkbox" <% if(property && property.amenities.accessibility=== true) {%> checked <% } %> name="accessibility"> Accesibilidad 
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <div class="form-group">
+                                                        <div class="checkbox">
+                                                            <label>
+                                                                <input type="checkbox" <% if(property && property.amenities.kitchen === true) {%> checked <% } %> name="kitchen"> Cocina 
                                                             </label>
                                                         </div>
                                                     </div>
                                                 </div> 
+
                                             </div> 
-
+                                            <!--  Rules -->
                                             <div class="col-sm-12 padding-top-15">
-                                                <p>Servicios</p> 
+                                                <h5 class="info-text"> Reglas (no seleccionado: no permitido)</h5>
                                             </div>
                                             <div class="col-sm-12">
                                                 <div class="col-sm-3">
                                                     <div class="form-group">
                                                         <div class="checkbox">
                                                             <label>
-                                                                <input type="checkbox"  name="wakeup"> Despertador
+                                                                <input type="checkbox"  name="smoking" <% if(property && property.rules.smoking === true) {%> checked <% } %> > Fumar
                                                             </label>
                                                         </div>
                                                     </div>
@@ -339,7 +371,7 @@
                                                     <div class="form-group">
                                                         <div class="checkbox">
                                                             <label>
-                                                                <input type="checkbox"  name="cleaning"> Limpieza
+                                                                <input type="checkbox"  name="pets" <% if(property && property.rules.pets === true) {%> checked <% } %>> Mascotas
                                                             </label>
                                                         </div>
                                                     </div>
@@ -348,7 +380,7 @@
                                                     <div class="form-group">
                                                         <div class="checkbox">
                                                             <label>
-                                                                <input type="checkbox"  name="restaruant"> Restaurante
+                                                                <input type="checkbox"  name="noise" <% if(property && property.rules.noise === true) {%> checked <% } %>> Ruido a partir 22h
                                                             </label>
                                                         </div>
                                                     </div>
@@ -357,58 +389,7 @@
                                                     <div class="form-group">
                                                         <div class="checkbox">
                                                             <label>
-                                                                <input type="checkbox"  name="parking"> Parking
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-3">
-                                                    <div class="form-group">
-                                                        <div class="checkbox">
-                                                            <label>
-                                                                <input type="checkbox"  name="laundry"> Lavandería
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-sm-12 padding-top-15">
-                                                <p>Reglas (no seleccionado: no permitido)</p> 
-                                            </div>
-                                            <div class="col-sm-12">
-                                                <div class="col-sm-3">
-                                                    <div class="form-group">
-                                                        <div class="checkbox">
-                                                            <label>
-                                                                <input type="checkbox"  name="smoking"> Fumar
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-3">
-                                                    <div class="form-group">
-                                                        <div class="checkbox">
-                                                            <label>
-                                                                <input type="checkbox"  name="pets"> Mascotas
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-3">
-                                                    <div class="form-group">
-                                                        <div class="checkbox">
-                                                            <label>
-                                                                <input type="checkbox"  name="noise"> Ruido a partir 22h
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-3">
-                                                    <div class="form-group">
-                                                        <div class="checkbox">
-                                                            <label>
-                                                                <input type="checkbox"  name="invite"> Invitar gente
+                                                                <input type="checkbox"  name="invite" <% if(property && property.rules.invite === true) {%> checked <% } %>> Invitar gente
                                                             </label>
                                                         </div>
                                                     </div>
@@ -416,319 +397,169 @@
 
 
                                             </div>
-
                                             <div class="col-sm-12"> 
                                                 <div class="col-sm-12"> 
                                                     <div class="form-group">
-                                                        <label>Regla opcional :</label>
-                                                        <textarea name="rule_extra" class="form-control" ></textarea>
+                                                        <label>Regla opcional </label>
+                                                        <textarea name="" class="form-control" ></textarea>
                                                     </div> 
                                                 </div> 
                                             </div>
-
-                                            <br>
-                                        </div>
-                                    </div>
-
-                                    <div class="tab-pane" id="hotel">
-                                        <h4 class="info-text">Hotel. Dónde está y que nos ofrece? </h4>
-                                        <div class="row">
-                                            <div class="col-sm-12 padding-top-15">
-                                                <p>Descripción </p> 
-                                            </div>
-                                            <div class="col-sm-12 padding-top-15">                                                   
-                                                <div class="col-sm-4">
-                                                    <div class="form-group">
-                                                        <label for="property-geo">Camas :</label>
-                                                        <input type="text" class="span2" name="beds" data-slider-min="0" 
-                                                               data-slider-max="20" data-slider-step="1" 
-                                                               data-slider-value="0" id="min-bed" ><br />
-                                                        <b class="pull-left color">1</b> 
-                                                        <b class="pull-right color">20</b>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            
-                                            <div class="col-sm-12 padding-top-15">
-                                                <p>Comodidades</p> 
-                                            </div>
-                                            <div class="col-sm-12">
-
-                                                <div class="col-sm-3">
-                                                    <div class="form-group">
-                                                        <div class="checkbox">
-                                                            <label>
-                                                                <input type="checkbox"  name="air_condition"> Aire acondicionado
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-3">
-                                                    <div class="form-group">
-                                                        <div class="checkbox">
-                                                            <label>
-                                                                <input type="checkbox"  name="heating"> Calefacción
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-3">
-                                                    <div class="form-group">
-                                                        <div class="checkbox">
-                                                            <label>
-                                                                <input type="checkbox"  name="wc_private"> Baño privado
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-3">
-                                                    <div class="form-group">
-                                                        <div class="checkbox">
-                                                            <label>
-                                                                <input type="checkbox"  name="wash_maschine"> Lavadora
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-3">
-                                                    <div class="form-group">
-                                                        <div class="checkbox">
-                                                            <label>
-                                                                <input type="checkbox"  name="tv"> Tv
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-3">
-                                                    <div class="form-group">
-                                                        <div class="checkbox">
-                                                            <label>
-                                                                <input type="checkbox"  name="wifi"> Wi-fi
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                </div>            
-                                                <div class="col-sm-3">
-                                                    <div class="form-group">
-                                                        <div class="checkbox">
-                                                            <label>
-                                                                <input type="checkbox"  name="dryer"> Secador
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-3">
-                                                    <div class="form-group">
-                                                        <div class="checkbox">
-                                                            <label>
-                                                                <input type="checkbox" name="swimming_pool"> Piscina
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-3">
-                                                    <div class="form-group">
-                                                        <div class="checkbox">
-                                                            <label>
-                                                                <input type="checkbox" name="balcony"> Balcón
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-3">
-                                                    <div class="form-group">
-                                                        <div class="checkbox">
-                                                            <label>
-                                                                <input type="checkbox" name="terrace"> Terraza
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-3">
-                                                    <div class="form-group">
-                                                        <div class="checkbox">
-                                                            <label>
-                                                                <input type="checkbox" name="exterior_views"> Vistas exteriores
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-3">
-                                                    <div class="form-group">
-                                                        <div class="checkbox">
-                                                            <label>
-                                                                <input type="checkbox" name="interior_views"> Vistas interiores
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                </div> 
-                                                <div class="col-sm-3">
-                                                    <div class="form-group">
-                                                        <div class="checkbox">
-                                                            <label>
-                                                                <input type="checkbox" name="closet"> Armario
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                </div>                              
-                                                <div class="col-sm-3">
-                                                    <div class="form-group">
-                                                        <div class="checkbox">
-                                                            <label>
-                                                                <input type="checkbox" name="emergency_exit"> Salida emergencia
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                </div>                                                 
-                                                <div class="col-sm-3">
-                                                    <div class="form-group">
-                                                        <div class="checkbox">
-                                                            <label>
-                                                                <input type="checkbox" name="fire_detector"> Detector de incendios 
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                </div> 
-                                            </div> 
-
-                                            <div class="col-sm-12 padding-top-15">
-                                                <p>Servicios</p> 
-                                            </div>
-                                            <div class="col-sm-12">
-                                                <div class="col-sm-3">
-                                                    <div class="form-group">
-                                                        <div class="checkbox">
-                                                            <label>
-                                                                <input type="checkbox"  name="wakeup"> Despertador
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-3">
-                                                    <div class="form-group">
-                                                        <div class="checkbox">
-                                                            <label>
-                                                                <input type="checkbox"  name="cleaning"> Limpieza
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-3">
-                                                    <div class="form-group">
-                                                        <div class="checkbox">
-                                                            <label>
-                                                                <input type="checkbox"  name="restaruant"> Restaurante
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-3">
-                                                    <div class="form-group">
-                                                        <div class="checkbox">
-                                                            <label>
-                                                                <input type="checkbox"  name="parking"> Parking
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-3">
-                                                    <div class="form-group">
-                                                        <div class="checkbox">
-                                                            <label>
-                                                                <input type="checkbox"  name="laundry"> Lavandería
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-sm-12 padding-top-15">
-                                                <p>Reglas (no seleccionado: no permitido)</p> 
-                                            </div>
-                                            <div class="col-sm-12">
-                                                <div class="col-sm-3">
-                                                    <div class="form-group">
-                                                        <div class="checkbox">
-                                                            <label>
-                                                                <input type="checkbox"  name="smoking"> Fumar
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-3">
-                                                    <div class="form-group">
-                                                        <div class="checkbox">
-                                                            <label>
-                                                                <input type="checkbox"  name="pets"> Mascotas
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-3">
-                                                    <div class="form-group">
-                                                        <div class="checkbox">
-                                                            <label>
-                                                                <input type="checkbox"  name="noise"> Ruido a partir 22h
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-3">
-                                                    <div class="form-group">
-                                                        <div class="checkbox">
-                                                            <label>
-                                                                <input type="checkbox"  name="invite"> Invitar gente
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-
-                                            </div>
-
-                                            <div class="col-sm-12"> 
-                                                <div class="col-sm-12"> 
-                                                    <div class="form-group">
-                                                        <label>Regla opcional :</label>
-                                                        <textarea name="rule_extra" class="form-control" ></textarea>
-                                                    </div> 
-                                                </div> 
-                                            </div>
-
                                             <br>
                                         </div>
                                     </div>
                                     <!-- End step 2 -->
 
-                                    <div class="tab-pane" id="step3">                                        
-                                        <h4 class="info-text">Momento de poner unas imágenes y/o vídeos </h4>
-                                        <div class="row">  
-                                            <div class="col-sm-6">
-                                                <div class="form-group">
-                                                    <label for="property-images">Elija las imágenes :</label>
-                                                    <input class="form-control" type="file" name="photos" id="property-images">
-                                                    <p class="help-block">Seleccione múltiples imágenes del alojamiento.</p>
-                                                </div>
+                                    <!--  Apartment | step3 -->
+                                    <div class="tab-pane" id="apartment">
+                                        <h4 class="info-text">Características del Apartamento.</h4>
+                                        <div class="row">
+                                            <div class="col-sm-12 padding-top-15">
+                                                <h5 class="info-text"> Descripción</h5> 
                                             </div>
-                                            <div class="col-sm-6"> 
-                                                <div class="form-group">
-                                                    <label for="property-video">Vídeos del alojamiento :</label>
-                                                    <input class="form-control" value="" placeholder="http://www.youtube.com, http://vimeo.com" name="property_video" type="text">
-                                                </div> 
-
-                                                <div class="form-group">
-                                                    <input class="form-control" value="" placeholder="http://www.youtube.com, http://vimeo.com" name="property_video" type="text">
+                                            <div class="col-sm-12 padding-top-15">                                                   
+    
+                                                <div class="col-sm-4">
+                                                    <div class="form-group">
+                                                        <label>Habitaciones <small>(obligatorio)</small></label>
+                                                        <input name="rooms" min="1" type="number" class="form-control" <% if(property){ %> value="<%= property.numberRooms %>" <% } %>>
+                                                    </div> 
                                                 </div>
-
-                                                <div class="form-group">
-                                                    <input class="form-control" value="" placeholder="http://www.youtube.com, http://vimeo.com" name="property_video" type="text">
+                                                <div class="col-sm-4">
+                                                    <div class="form-group">
+                                                        <label>Baños <small>(obligatorio)</small></label>
+                                                        <input name="baths"  min="1" type="number" class="form-control" <% if(property){ %> value="<%= property.numberBaths %>" <% } %>>
+                                                    </div> 
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <!--  End step 3 -->
+                                    <!--  End Apartment | step3 -->
 
+                                    <!--  Hotel | step3 -->
+                                    <div class="tab-pane" id="hotel">
+                                        <h4 class="info-text">Características de la habitación Hotel</h4>
+                                        <div class="row">
+                                            <div class="col-sm-12 padding-top-15">
+                                                <h5 class="info-text"> Descripción</h5> 
+                                            </div>
+                                            <div class="col-sm-12 padding-top-15">
+                                                <div class="col-sm-4">
+                                                    <div class="form-group">
+                                                        <label>Camas <small>(obligatorio)</small></label>
+                                                        <input name="beds"  min="1" type="number" class="form-control" <% if(property){ %> value="<%= property.beds %>" <% } %>>
+                                                    </div> 
+                                                </div>                                                  
+                                                <div class="col-sm-4">
+                                                    <div class="form-group">
+                                                        <label>Tipo de habitacíon </label>
+                                                        <select name="room_type" class="form-control">
+                                                            <option selected>Single</option>
+                                                            <option>Double</option>
+                                                            <option>Triple</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!--  Services -->
+                                            <% if(property && property.__t ==="Hotel"){ %> 
+                                                <div class="col-sm-12 padding-top-15">
+                                                    <h5 class="info-text"> Servicios</h5> 
+                                                </div>
+                                                <div class="col-sm-12">
+                                                    <div class="col-sm-3">
+                                                        <div class="form-group">
+                                                            <div class="checkbox">
+                                                                <label>
+                                                                    <input type="checkbox"  name="wakeup" <% if(property.services.wakeup === true) {%> checked <% } %> > Despertador
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <div class="form-group">
+                                                            <div class="checkbox">
+                                                                <label>
+                                                                    <input type="checkbox"  name="cleaning" <% if(property.services.cleaning === true) {%> checked <% } %> > Limpieza
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <div class="form-group">
+                                                            <div class="checkbox">
+                                                                <label>
+                                                                    <input type="checkbox"  name="restaurant" <% if(property.services.restaurant === true) {%> checked <% } %> > Restaurante
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <div class="form-group">
+                                                            <div class="checkbox">
+                                                                <label>
+                                                                    <input type="checkbox"  name="parking" <% if(property.services.parking === true) {%> checked <% } %> > Parking
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <div class="form-group">
+                                                            <div class="checkbox">
+                                                                <label>
+                                                                    <input type="checkbox"  name="laundry" <% if(property.services.laundry === true) {%> checked <% } %> > Lavandería
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            <% } %> 
+
+                                        </div>
+                                    </div>
+                                    <!--  End Hotel | step3 -->
+
+                                    <!--  step 4 -->
                                     <div class="tab-pane" id="step4">                                        
+                                        <h4 class="info-text">Momento de poner unas imágenes y/o vídeos </h4>
+                                        <div class="row">  
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <label for="property-video">Foto portada : <small>Se recomiendan de 300x300px</small></label>
+                                                    <input class="form-control" placeholder="http://www.google.es/images/something.jpeg" name="main_photo" type="text" <% if(property){ %> value="<%= property.main_photo.url %>" <% } %> ><br>
+                                                    <input class="form-control padding-top-15"  type="text" placeholder="Descripción de la foto"  name="description_main_photo" <% if(property){ %> value="<%= property.main_photo.description %>" <% } %>>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for="property-video">Foto 1 :</label>
+                                                    <input class="form-control" placeholder="http://www.google.es/images/something.jpeg" name="photo1" type="text" <% if(property){ %> value="<%= property.photos[0].url %>" <% } %> ><br>
+                                                    <input class="form-control padding-top-15" type="text" placeholder="Descripción de la foto"  name="description_photo1" <% if(property){ %> value="<%= property.photos[0].description %>" <% } %> >
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6"> 
+                                                <div class="form-group">
+                                                    <label for="property-video">Foto 2 :</label>
+                                                    <input class="form-control" placeholder="http://www.google.es/images/something.jpeg" name="photo2" type="text" <% if(property){ %> value="<%= property.photos[1].url %>" <% } %> ><br>
+                                                    <input class="form-control padding-top-15" type="text" placeholder="Descripción de la foto"  name="description_photo2" <% if(property){ %> value="<%= property.photos[1].description %>" <% } %> >
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="property-video">Foto 3 :</label>
+                                                    <input class="form-control"  placeholder="http://www.google.es/images/something.jpeg" name="photo3" type="text" <% if(property){ %> value="<%= property.photos[2].url %>" <% } %> ><br>
+                                                    <input class="form-control padding-top-15"  type="text" placeholder="Descripción de la foto"  name="description_photo3" <% if(property){ %> value="<%= property.photos[2].description %>" <% } %> >
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-12">
+                                                <div class="form-group">
+                                                    <label for="property-video">Vídeo del alojamiento :</label>
+                                                    <input class="form-control" placeholder="http://www.youtube.com, http://vimeo.com" name="video" type="text" <% if(property){ %> value="<%= property.video %>" <% } %>>
+                                                </div> 
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--  End step 4 -->
+
+                                    <!--  step 5 -->
+                                    <div class="tab-pane" id="step5">                                        
                                         <h4 class="info-text"> Casi está! </h4>
                                         <div class="row">  
                                             <div class="col-sm-12">
@@ -744,7 +575,7 @@
 
                                                     <div class="checkbox">
                                                         <label>
-                                                            <input type="checkbox" /> <strong>Acepto los términos y condiciones.</strong>
+                                                            <input type="checkbox" required/> <strong>Acepto los términos y condiciones.</strong>
                                                         </label>
                                                     </div> 
 
@@ -752,7 +583,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <!--  End step 4 -->
+                                    <!--  End step 5 -->
 
                                 </div>
 
@@ -791,18 +622,38 @@
 
 
 
-                //Con este script habilitamos el paso 2 según Hotel o Apartamento.
-                const select = document.querySelector("#propertyType")
+                //Con este script habilitamos el paso 2 según Hotel o Apartamento al cambiar el selector
+                const select = document.querySelector("#propertyType");
+                const apartment = document.querySelector("#apartment");
+                const hotel = document.querySelector("#hotel");
+
                 select.addEventListener("change", (e) => {
                         if(e.target.value == "Apartamento"){
-                             const apartment = document.querySelector("#apartment");
-                             apartment.setAttribute("id", "step2")
+                             apartment.setAttribute("id", "step3")
                         }
-                        const hotel = document.querySelector("#hotel");
-                        hotel.setAttribute("id", "step2")
+                        hotel.setAttribute("id", "step3")
                 })
 
+                //Nos permite pasar al paso correspondiente cuando editamos el alojamiento y no usamos el selector.
+                if(select.value === "Apartamento"){
+                    apartment.setAttribute("id", "step3")
+                }
+                if(select.value === "Hotel"){
+                    hotel.setAttribute("id", "step3")
+                }
                 
+
+                function onChangeLocation(){
+                    document.querySelector("#infoLocation").style.display = "none";
+                    document.querySelector("#province").style.display = "block";
+                    document.querySelector("#municipe").style.display = "block";
+                    document.querySelector("#currentProv").removeAttribute("name");
+                    document.querySelector("#currentMun").removeAttribute("name");
+                    prov.setAttribute("name", "city");
+                    mun.setAttribute("name", "district")
+                    prov.required = true
+                    mun.required = true
+                }
             </script>
     
         </footer>

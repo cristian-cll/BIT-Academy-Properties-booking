@@ -1,15 +1,14 @@
-const {PropertyModel} = require("../models/property")
-const {Booking} = require("../models/index")
+const {Booking, PropertyModel} = require("../models/index")
 
 exports.home = async (req, res) => {
     try{
-
-        const listProperties = await PropertyModel.find().lean();
+        const lastAddedApartments = await PropertyModel.find({__t: "Apartamento", availability: { $nin: "No disponible"}}).limit(4).lean();
+        const lastAddedHotels = await PropertyModel.find({__t: "Hotel", availability: { $nin: "No disponible"}}).limit(4).lean();
 
         res.render("pages/index",{
-            allProperties : listProperties,
+            lastAddedApartments,
+            lastAddedHotels
         })
-
     } 
     catch (error) {
         console.log(error);
@@ -20,8 +19,12 @@ exports.about = (req, res,) => {
     res.render("pages/about");
 }
 
-
 exports.search = async (req, res, next) => {
+
+    //Si no hay parametros en la querystring o se accede directamente a /search/
+    if(!req._parsedOriginalUrl.search){
+        return res.redirect("/")
+    }
 
     // Busca primero las propiedades ocupadas según FECHA
     const checkIn = req.query.date_in
@@ -30,9 +33,9 @@ exports.search = async (req, res, next) => {
     let occupiedPropertiesId = [];
     
     //Evitar mal dato intencionado en la query 
-    // Si la checkIn es mayor o igual que checkout 
+    // Si el checkIn es mayor o igual que checkOut 
 
-    if(checkIn >= checkOut){
+    if(new Date(checkIn) >= new Date(checkOut)){
         console.log("checkIn mayor o igual que checkout ");
         return res.redirect("/")
     }
@@ -40,16 +43,16 @@ exports.search = async (req, res, next) => {
         const confirmedBookings = await Booking.find({
 
               $or: [
-                {checkIn: {$gte:  new Date(checkIn), $lte: new Date(checkOut)}},
-                {checkOut: {$gte:  new Date(checkIn), $lte: new Date(checkOut)}},
+                {checkIn: {$gte: new Date(checkIn), $lte: new Date(checkOut)}},
+                {checkOut: {$gte: new Date(checkIn), $lte: new Date(checkOut)}},
                 {$and: [
-                  {checkIn: {$lt:  new Date(checkIn)}},
+                  {checkIn: {$lt: new Date(checkIn)}},
                   {checkOut: {$gt: new Date(checkOut)}}
                 ]}
             ]
 
         })
-        confirmedBookings.map(confirmedBooking => occupiedPropertiesId.push(confirmedBooking.property._id));
+        occupiedPropertiesId = confirmedBookings.map(confirmedBooking => confirmedBooking.property._id);
     }
     catch (err) {
         console.error('Search', err.message);
@@ -58,21 +61,25 @@ exports.search = async (req, res, next) => {
     finally {
 
     //************************************* Búsqueda *************************************
-    const {title, city, apartment, hotel} = req.query;
+    const {title, city, apartment, hotel, capacity} = req.query;
     const query= {};
 
-    //Condiciones - filtros    
+    //Condiciones - filtros
+
     title && (query["title"] = new RegExp(title,'i'));
-    city && (query["address.city"] = city);
+    city && (query["address.city"] =  new RegExp(city,'i'));
+    capacity && (query["capacity"] = {$gte: capacity});
     apartment && !hotel && (query["__t"] = "Apartamento");
     !apartment && hotel && (query["__t"] = "Hotel");
+    query["availability"] = { $nin: "No disponible" }
     query["_id"] = { $nin: occupiedPropertiesId } // No incluídas las prop. resevadas
 
 
-    const PropertyListCount = await PropertyModel.find(query).count();
+    const PropertyListCount = await PropertyModel.find(query).countDocuments();
 
 
     //************************************* Paginación *************************************
+
     const url = req._parsedOriginalUrl.search.replace(/&page=\d/g, "");
 
     let perPage = req.query.limit;
@@ -101,16 +108,16 @@ exports.search = async (req, res, next) => {
       const pageResult = await PropertyModel.find(query).lean()
       .skip(pagination.pageOffset()) //offset 
       .limit(pagination.limit) 
+
+
       res.render('pages/search', {
           listProperties: pageResult,
           current: pagination.page,
           pages: pagination.totalPages(),
           url,
           perPage,
+          search: req.query
         });
 
     }// End finally
-
 }
-
-

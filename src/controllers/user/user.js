@@ -31,7 +31,6 @@ exports.userLogin = passport.authenticate("local", {
 // Destruye la sesión del usuario
 exports.userLogout = (req, res) => {
     req.logout();
-    req.flash("success_msg", "Has cerrado sesión. Hasta pronto!");
     res.redirect("/")
 }
 

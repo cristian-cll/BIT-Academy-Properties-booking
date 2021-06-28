@@ -5,7 +5,7 @@ require("dotenv").config();
 const express = require("express");
 const path = require("path");
 const db = require("./database");
-const flash = require("connect-flash");
+const flash = require("connect-flash"); //Por hacer..
 const session = require("express-session");
 const passport = require("passport");
 
@@ -40,9 +40,10 @@ app.use(
         saveUninitialized: true
     })
 );
-app.use(passport.initialize())
-app.use(passport.session())
-app.use(flash())
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(flash());
+
 
 // Global Variables
 app.use((req, res, next) => {
@@ -50,6 +51,7 @@ app.use((req, res, next) => {
     res.locals.error_msg = req.flash("error_msg");
     res.locals.error = req.flash("error");
     res.locals.user = req.user || null;
+    res.locals.property = null;
     next();
 });
 
@@ -81,6 +83,5 @@ db.connectDB()
         console.log(`Server listening on port: ${app.get("port")} `) 
     })
  })
-
 
 module.exports = app

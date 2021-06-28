@@ -19,4 +19,4 @@ exports.connectDB = async () => {
 };
 
 
-    //MONGODB_URI = "mongodb+srv://root:1234@cluster0.5hy5l.mongodb.net/?retryWrites=true&w=majority";
+//MONGODB_URI = "mongodb+srv://root:1234@cluster0.5hy5l.mongodb.net/?retryWrites=true&w=majority";

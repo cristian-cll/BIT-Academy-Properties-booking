@@ -1,6 +1,6 @@
-const helpers = {}
+const auth = {}
 
-helpers.isAuthenticated = (req, res, next) => {
+auth.isAuthenticated = (req, res, next) => {
     if (req.isAuthenticated()){
         return next();
     }
@@ -9,7 +9,7 @@ helpers.isAuthenticated = (req, res, next) => {
 }
 
 
-helpers.isAdminAuthenticated = (req, res, next) => {
+auth.isAdminAuthenticated = (req, res, next) => {
     if (req.isAuthenticated() && req.user.role === "Admin"){
         return next();
     }
@@ -17,4 +17,4 @@ helpers.isAdminAuthenticated = (req, res, next) => {
     res.redirect("/user/login")
 }
 
-module.exports = helpers;
+module.exports = auth;

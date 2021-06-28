@@ -41,18 +41,15 @@
                                     </div> 
 
                                     <ul id="image-gallery" class="gallery list-unstyled cS-hidden">
-                                        <li data-thumb="/assets/img/property-1/property1.jpg"> 
-                                            <img src="/assets/img/property-1/property1.jpg" />
+                                        <li data-thumb="<%= property.photos[0].url %>"> 
+                                            <img src="<%= property.photos[0].url %>" title="<%= property.photos[0].description %>"/>
                                         </li>
-                                        <li data-thumb="/assets/img/property-1/property2.jpg"> 
-                                            <img src="/assets/img/property-1/property3.jpg" />
+                                        <li data-thumb="<%= property.photos[1].url %>"> 
+                                            <img src="<%= property.photos[1].url %>" title="<%= property.photos[1].description %>"/>
                                         </li>
-                                        <li data-thumb="/assets/img/property-1/property3.jpg"> 
-                                            <img src="/assets/img/property-1/property3.jpg" />
-                                        </li>
-                                        <li data-thumb="/assets/img/property-1/property4.jpg"> 
-                                            <img src="/assets/img/property-1/property4.jpg" />
-                                        </li>                                         
+                                        <li data-thumb="<%= property.photos[2].url %>"> 
+                                            <img src="<%= property.photos[2].url %>" title="<%= property.photos[2].description %>"/>
+                                        </li>                         
                                     </ul>
                                 </div>
                             </div>
@@ -61,15 +58,22 @@
                         <div class="single-property-wrapper">
                             <div class="single-property-header">                                          
                                 <h1 class="property-title pull-left"><%= property.title %> </h1>
-                                <span class="property-price pull-right"><%= property.price %> €/noche</span>
+                                <span class="property-price pull-right"><%= property.price %> €/noche</span><br><br>
+                                <span><%= property.__t %></span><br>
                             </div>
-                            <h4 class="pull-left"><%= property.__t %> </h4>
-                            <div class="property-meta entry-meta clearfix ">   
+                            <p>
+                                <img src="/assets/img/icon/location.png" width="30" title="location" alt="location">
+                                <%= property.address.street %> <br>
+                                <span><%= property.address.city %>, <%= property.address.district %></span>
+                            </p>
+
+                            <div class="property-meta entry-meta clearfix ">
+                            <h4 class="s-property-title">Comodidades</h4>   
                                 <% for(const amenity in property.amenities) {  %> 
                                     <% if(property.amenities[amenity] === true) { %> 
-                                        <div class="col-xs-6 col-sm-2 col-md-3 p-b-15">
+                                        <div class="col-xs-6 col-sm-2 col-md-2 p-b-15">
                                             <span class="property-info-icon icon-tag">   
-                                                <img src="<%= `/assets/img/icon/${amenity}.png`%>  " width="30" title="<%= amenity %>" alt="<%= amenity %>">
+                                                <img src="<%= `/assets/img/icon/${amenity}.png`%>" width="30" title="<%= amenity %>" alt="<%= amenity %>">
                                             </span>
                                             <span class="property-info-entry">
                                                 <span class="property-info-label"></span>
@@ -86,76 +90,101 @@
                             <div class="section">
                                 <h4 class="s-property-title">Descripción</h4>
                                 <div class="s-property-content">
-                                    <p>Nulla quis dapibus nisl. Suspendisse ultricies Nulla quis dapibus nisl. Suspendisse ultricies commodo arcu nec pretium. Nullam sed arcu ultricies commodo arcu nec pretium. Nullam sed arcu ultricies Nulla quis dapibus nisl. Suspendisse ultricies commodo arcu nec pretium. Nullam sed arcu ultricies Nulla quis dapibus nisl. Suspendisse ultricies commodo arcu nec pretium. Nullam sed arcu ultricies                                </p>
+                                    <p><%= property.description %></p>
                                 </div>
                             </div>
                             <!-- End description area  -->
 
                             <div class="section additional-details">
-
                                 <h4 class="s-property-title">Detalles adicionales</h4>
-
                                 <ul class="additional-details-list clearfix">
                                     <li>
-                                        <span class="col-xs-6 col-sm-4 col-md-4 add-d-title">Waterfront</span>
-                                        <span class="col-xs-6 col-sm-8 col-md-8 add-d-entry">Yes</span>
+                                        <span class="col-xs-6 col-sm-4 col-md-4 add-d-title">Espacio útil</span>
+                                        <span class="col-xs-6 col-sm-8 col-md-8 add-d-entry"><%= property.area %> m2</span>
                                     </li>
 
                                     <li>
-                                        <span class="col-xs-6 col-sm-4 col-md-4 add-d-title">Built In</span>
-                                        <span class="col-xs-6 col-sm-8 col-md-8 add-d-entry">2003</span>
+                                        <span class="col-xs-6 col-sm-4 col-md-4 add-d-title">Propietario</span>
+                                        <span class="col-xs-6 col-sm-8 col-md-8 add-d-entry"><%= property.owner %></span>
                                     </li>
                                     <li>
-                                        <span class="col-xs-6 col-sm-4 col-md-4 add-d-title">Parking</span>
-                                        <span class="col-xs-6 col-sm-8 col-md-8 add-d-entry">2 Or More Spaces,Covered Parking,Valet Parking</span>
+                                        <span class="col-xs-6 col-sm-4 col-md-4 add-d-title">Capacidad</span>
+                                        <span class="col-xs-6 col-sm-8 col-md-8 add-d-entry"><%= property.capacity %></span>
                                     </li>
-
-                                    <li>
-                                        <span class="col-xs-6 col-sm-4 col-md-4 add-d-title">Waterfront</span>
-                                        <span class="col-xs-6 col-sm-8 col-md-8 add-d-entry">Yes</span>
-                                    </li>
-
-                                    <li>
-                                        <span class="col-xs-6 col-sm-4 col-md-4 add-d-title">View</span>
-                                        <span class="col-xs-6 col-sm-8 col-md-8 add-d-entry">Intracoastal View,Direct ew</span>
-                                    </li>
-
-                                    <li>
-                                        <span class="col-xs-6 col-sm-4 col-md-4 add-d-title">Waterfront Description:</span>
-                                        <span class="col-xs-6 col-sm-8 col-md-8 add-d-entry">Intracoastal Front,Ocean Access</span>
-                                    </li> 
+                                    <% if(property.__t === "Apartamento"){ %>
+                                        <li>
+                                            <span class="col-xs-6 col-sm-4 col-md-4 add-d-title">Baños</span>
+                                            <span class="col-xs-6 col-sm-8 col-md-8 add-d-entry"><%= property.numberBaths %> </span>
+                                        </li>
+                                        <li>
+                                            <span class="col-xs-6 col-sm-4 col-md-4 add-d-title">Habitaciones</span>
+                                            <span class="col-xs-6 col-sm-8 col-md-8 add-d-entry"><%= property.numberRooms %> </span>
+                                        </li>
+                                    <% } %> 
+                                    <% if(property.__t === "Hotel"){ %>
+                                        <li>
+                                            <span class="col-xs-6 col-sm-4 col-md-4 add-d-title">Camas</span>
+                                            <span class="col-xs-6 col-sm-8 col-md-8 add-d-entry"><%= property.beds %> </span>
+                                        </li>
+                                        <li>
+                                            <span class="col-xs-6 col-sm-4 col-md-4 add-d-title">Tipo Habitación</span>
+                                            <span class="col-xs-6 col-sm-8 col-md-8 add-d-entry"><%= property.type %> </span>
+                                        </li>
+                                    <% } %> 
 
                                 </ul>
                             </div>  
                             <!-- End additional-details area  -->
 
                             <div class="section property-features">      
-
-                                <h4 class="s-property-title">Servicios</h4>                            
-                                <ul>
-                                    <li><a href="properties.html">Swimming Pool</a></li>   
-                                    <li><a href="properties.html">3 Stories</a></li>
-                                    <li><a href="properties.html">Central Cooling</a></li>
-                                    <li><a href="properties.html">Jog Path 2</a></li>
-                                    <li><a href="properties.html">2 Lawn</a></li>
-                                    <li><a href="properties.html">Bike Path</a></li>
-                                </ul>
-
+                            <% if(property.__t ==="Hotel") { %>   
+                                <h4 class="s-property-title">Servicios</h4>   
+                                <% for(const service in property.services) {  %> 
+                                    <% if(property.services[service] === true) { %> 
+                                        <div class="col-xs-6 col-sm-2 col-md-2 p-b-15">
+                                            <span class="property-info-icon icon-tag">   
+                                                <img src="<%= `/assets/img/icon/${service}.png`%>  " width="30" title="<%= service %>" alt="<%= service %>">
+                                            </span>
+                                            <span class="property-info-entry">
+                                                <span class="property-info-label"></span>
+                                                <span class="property-info-value"></span>
+                                            </span>
+                                        </div>
+                                    <% } %> 
+                                <% } %>
+                            <% } %>  
                             </div>
+                            <div class="section property-features"></div>
+                            <h4 class="s-property-title">Reglas</h4>
+                            <% for(const rule in property.rules) {  %> 
+                                <% if(property.rules[rule] === true) { %> 
+                                    <div class="col-xs-6 col-sm-2 col-md-2 p-b-15">
+                                        <span class="property-info-icon icon-tag">   
+                                            <img src="<%= `/assets/img/icon/${rule}.png`%>" width="30" title="<%= rule %>" alt="<%= rule %>">
+                                        </span>
+                                    </div>
+                                <% } else if (property.rules[rule] === false) { %>
+                                    <div class="col-xs-6 col-sm-2 col-md-2 p-b-15">
+                                        <span class="property-info-icon icon-tag">   
+                                            <img src="<%= `/assets/img/icon/no_${rule}.png`%>" width="30" title="<%= rule %>" alt="<%= rule %>">
+                                        </span>
+                                    </div>
+                                <% } %> 
+                            <% } %> 
                             <!-- End features area  -->
-
+                            <br>
                             <div class="section property-video"> 
-                                <h4 class="s-property-title">Property Video</h4> 
+                                <h4 class="s-property-title">Vídeo alojamiento</h4> 
                                 <div class="video-thumb">
-                                    <a class="video-popup" href="yout" title="Virtual Tour">
-                                        <img src="/assets/img/property-video.jpg" class="img-responsive wp-post-image" alt="Exterior">            
-                                    </a>
+                                    <video width="100%" autoplay loop muted> 
+                                        <source src="<%= property.video %> " type="video/mp4">
+                                        Your browser does not support the video tag.
+                                      </video>
                                 </div>
                             </div>
                             <!-- End video area  -->
                             
-                            
-
+                        
                             <div class="section property-share"> 
                                 <h4 class="s-property-title">Comparte con tus amig@s </h4> 
                                 <div class="roperty-social">
@@ -185,13 +214,16 @@
                                         <div class="clear">
                                             <div class="col-xs-4 col-sm-4 dealer-face">
                                                 <a href="">
-                                                    <img src="/assets/img/client-face1.png" class="img-circle">
+                                                    <img src="/assets/img/icon/owner.png" class="img-circle">
                                                 </a>
                                             </div>
                                             <div class="col-xs-8 col-sm-8 ">
+                                                <% if(user && user.role === "Admin"){ %> 
+                                                    <input class="btn btn-primary" value="Editar" type="submit"onclick="window.location.href='/admin/edit/<%= property._id %>'">
+                                                <% } %> 
                                                 <h3 class="dealer-name">
-                                                    <a href="">Nathan James</a>
-                                                    <span>Real Estate Agent</span>        
+                                                    <a href=""><%= property.owner %> </a><br>
+                                                    <span>Propietario</span>        
                                                 </h3>
                                                 <div class="dealer-social-media">
                                                     <a class="twitter" target="_blank" href="">
@@ -218,7 +250,7 @@
                                             <ul class="dealer-contacts">                                       
                                                 <li><i class="pe-7s-map-marker strong"> </i> 9089 your adress her</li>
                                                 <li><i class="pe-7s-mail strong"> </i> email@yourcompany.com</li>
-                                                <li><i class="pe-7s-call strong"> </i> +1 908 967 5906</li>
+                                                <li><i class="pe-7s-call strong"> </i><%= property.phone %> </li>
                                             </ul>
                                             <p>Duis mollis  blandit tempus porttitor curabiturDuis mollis  blandit tempus porttitor curabitur , est non…</p>
                                         </div>
@@ -226,70 +258,7 @@
                                     </div>
                                 </div>
                             </div>
-
-                            <div class="panel panel-default sidebar-menu similar-property-wdg wow fadeInRight animated">
-                                <div class="panel-heading">
-                                    <h3 class="panel-title">Similar Properties</h3>
-                                </div>
-                                <div class="panel-body recent-property-widget">
-                                        <ul>
-                                        <li>
-                                            <div class="col-md-3 col-sm-3 col-xs-3 blg-thumb p0">
-                                                <a href="single.html"><img src="/assets/img/demo/small-property-2.jpg"></a>
-                                                <span class="property-seeker">
-                                                    <b class="b-1">A</b>
-                                                    <b class="b-2">S</b>
-                                                </span>
-                                            </div>
-                                            <div class="col-md-8 col-sm-8 col-xs-8 blg-entry">
-                                                <h6> <a href="single.html">Super nice villa </a></h6>
-                                                <span class="property-price">3000000$</span>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="col-md-3 col-sm-3  col-xs-3 blg-thumb p0">
-                                                <a href="single.html"><img src="/assets/img/demo/small-property-1.jpg"></a>
-                                                <span class="property-seeker">
-                                                    <b class="b-1">A</b>
-                                                    <b class="b-2">S</b>
-                                                </span>
-                                            </div>
-                                            <div class="col-md-8 col-sm-8 col-xs-8 blg-entry">
-                                                <h6> <a href="single.html">Super nice villa </a></h6>
-                                                <span class="property-price">3000000$</span>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="col-md-3 col-sm-3 col-xs-3 blg-thumb p0">
-                                                <a href="single.html"><img src="/assets/img/demo/small-property-3.jpg"></a>
-                                                <span class="property-seeker">
-                                                    <b class="b-1">A</b>
-                                                    <b class="b-2">S</b>
-                                                </span>
-                                            </div>
-                                            <div class="col-md-8 col-sm-8 col-xs-8 blg-entry">
-                                                <h6> <a href="single.html">Super nice villa </a></h6>
-                                                <span class="property-price">3000000$</span>
-                                            </div>
-                                        </li>
-
-                                        <li>
-                                            <div class="col-md-3 col-sm-3 col-xs-3 blg-thumb p0">
-                                                <a href="single.html"><img src="/assets/img/demo/small-property-2.jpg"></a>
-                                                <span class="property-seeker">
-                                                    <b class="b-1">A</b>
-                                                    <b class="b-2">S</b>
-                                                </span>
-                                            </div>
-                                            <div class="col-md-8 col-sm-8 col-xs-8 blg-entry">
-                                                <h6> <a href="single.html">Super nice villa </a></h6>
-                                                <span class="property-price">3000000$</span>
-                                            </div>
-                                        </li>
-
-                                    </ul>
-                                </div>
-                            </div>                          
+                      
 
                             <div class="panel panel-default sidebar-menu wow fadeInRight animated">
                                 <div class="panel-heading">
@@ -300,173 +269,6 @@
                                 </div>
                             </div>
 
-                            <div class="panel panel-default sidebar-menu wow fadeInRight animated" >
-                                <div class="panel-heading">
-                                    <h3 class="panel-title">Smart search</h3>
-                                </div>
-                                <div class="panel-body search-widget">
-                                    <form action="" class=" form-inline"> 
-                                        <fieldset>
-                                            <div class="row">
-                                                <div class="col-xs-12">
-                                                    <input type="text" class="form-control" placeholder="Key word">
-                                                </div>
-                                            </div>
-                                        </fieldset>
-
-                                        <fieldset>
-                                            <div class="row">
-                                                <div class="col-xs-6">
-
-                                                    <select id="lunchBegins" class="selectpicker" data-live-search="true" data-live-search-style="begins" title="Select Your City">
-
-                                                        <option>New york, CA</option>
-                                                        <option>Paris</option>
-                                                        <option>Casablanca</option>
-                                                        <option>Tokyo</option>
-                                                        <option>Marraekch</option>
-                                                        <option>kyoto , shibua</option>
-                                                    </select>
-                                                </div>
-                                                <div class="col-xs-6">
-
-                                                    <select id="basic" class="selectpicker show-tick form-control">
-                                                        <option> -Status- </option>
-                                                        <option>Rent </option>
-                                                        <option>Boy</option>
-                                                        <option>used</option>  
-
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </fieldset>
-
-                                        <fieldset class="padding-5">
-                                            <div class="row">
-                                                <div class="col-xs-6">
-                                                    <label for="price-range">Rango precio (€):</label>
-                                                    <input type="text" class="span2" value="" data-slider-min="0" 
-                                                           data-slider-max="300" data-slider-step="1" 
-                                                           data-slider-value="[<%= property.price - 10  %>,<%= property.price + 50 %>]" id="price-range" ><br />
-                                                    <b class="pull-left color">25 €</b> 
-                                                    <b class="pull-right color"><%= property.price + 100 %> €</b>                                                
-                                                </div>
-                                                <div class="col-xs-6">
-                                                    <label for="property-geo">Property geo (m2) :</label>
-                                                    <input type="text" class="span2" value="" data-slider-min="0" 
-                                                           data-slider-max="600" data-slider-step="5" 
-                                                           data-slider-value="[50,450]" id="property-geo" ><br />
-                                                    <b class="pull-left color">40m</b> 
-                                                    <b class="pull-right color">12000m</b>                                                
-                                                </div>                                            
-                                            </div>
-                                        </fieldset>                                
-
-                                        <fieldset class="padding-5">
-                                            <div class="row">
-                                                <div class="col-xs-6">
-                                                    <label for="price-range">Min baths :</label>
-                                                    <input type="text" class="span2" value="" data-slider-min="0" 
-                                                           data-slider-max="600" data-slider-step="5" 
-                                                           data-slider-value="[250,450]" id="min-baths" ><br />
-                                                    <b class="pull-left color">1</b> 
-                                                    <b class="pull-right color">120</b>                                                
-                                                </div>
-
-                                                <div class="col-xs-6">
-                                                    <label for="property-geo">Min bed :</label>
-                                                    <input type="text" class="span2" value="" data-slider-min="0" 
-                                                           data-slider-max="600" data-slider-step="5" 
-                                                           data-slider-value="[250,450]" id="min-bed" ><br />
-                                                    <b class="pull-left color">1</b> 
-                                                    <b class="pull-right color">120</b>
-
-                                                </div>
-                                            </div>
-                                        </fieldset>
-
-                                        <fieldset class="padding-5">
-                                            <div class="row">
-                                                <div class="col-xs-6">
-                                                    <div class="checkbox">
-                                                        <label> <input type="checkbox" checked> Fire Place</label>
-                                                    </div> 
-                                                </div>
-
-                                                <div class="col-xs-6">
-                                                    <div class="checkbox">
-                                                        <label> <input type="checkbox"> Dual Sinks</label>
-                                                    </div>
-                                                </div>                                            
-                                            </div>
-                                        </fieldset>
-
-                                        <fieldset class="padding-5">
-                                            <div class="row">
-                                                <div class="col-xs-6"> 
-                                                    <div class="checkbox">
-
-                                                        <label> <input type="checkbox" checked>  </label>
-                                                    </div>
-                                                </div>  
-                                                <div class="col-xs-6"> 
-                                                    <div class="checkbox">
-                                                        <label> <input type="checkbox" checked> 2 Stories </label>
-                                                    </div>
-                                                </div>  
-                                            </div>
-                                        </fieldset>
-
-                                        <fieldset class="padding-5">
-                                            <div class="row">
-                                                <div class="col-xs-6"> 
-                                                    <div class="checkbox">
-                                                        <label><input type="checkbox"> Laundry Room </label>
-                                                    </div>
-                                                </div>  
-                                                <div class="col-xs-6"> 
-                                                    <div class="checkbox">
-                                                        <label> <input type="checkbox"> Emergency Exit</label>
-                                                    </div>
-                                                </div>  
-                                            </div>
-                                        </fieldset>
-
-                                        <fieldset class="padding-5">
-                                            <div class="row">
-                                                <div class="col-xs-6"> 
-                                                    <div class="checkbox">
-                                                        <label>  <input type="checkbox" checked> Jog Path </label>
-                                                    </div>
-                                                </div>  
-                                                <div class="col-xs-6"> 
-                                                    <div class="checkbox">
-                                                        <label>  <input type="checkbox"> 26' Ceilings </label>
-                                                    </div>
-                                                </div>  
-                                            </div>
-                                        </fieldset>
-
-                                        <fieldset class="padding-5">
-                                            <div class="row">
-                                                <div class="col-xs-12"> 
-                                                    <div class="checkbox">
-                                                        <label>  <input type="checkbox"> Hurricane Shutters </label>
-                                                    </div>
-                                                </div>  
-                                            </div>
-                                        </fieldset>
-
-                                        <fieldset >
-                                            <div class="row">
-                                                <div class="col-xs-12">  
-                                                    <input class="button btn largesearch-btn" value="Search" type="submit">
-                                                </div>  
-                                            </div>
-                                        </fieldset>                                     
-                                    </form>
-                                </div>
-                            </div>
 
                         </aside>
                     </div>

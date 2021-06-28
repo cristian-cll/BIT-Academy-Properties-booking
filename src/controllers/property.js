@@ -1,5 +1,4 @@
-const {PropertyModel} = require("../models/property")
-
+const {PropertyModel} = require("../models/index")
 
 //Detalle de la propiedad
 exports.detail = async (req, res) => {
@@ -9,13 +8,14 @@ exports.detail = async (req, res) => {
 
         const property = await PropertyModel.findById(id).lean()
 
-        res.render("pages/property-detail", {
+        return res.render("pages/property-detail", {
                 property: property,
         })
-
-        
+ 
     } catch (error) {
-        console.log(error);
+        console.log("Error", error);
+        if(error){
+            return res.redirect("/")
+        }
     }
 }
-

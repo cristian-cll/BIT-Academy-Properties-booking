@@ -27,7 +27,6 @@
             </div>
         </div>
         <!-- End page header --> 
-
         <!-- property area -->
         <div class="content-area user-profiel" style="background-color: #FCFCFC;">&nbsp;
             <div class="container">   
@@ -40,10 +39,114 @@
                             </h3>
                             <hr>
                         </div>
-                        <div class="col-sm-5 col-sm-offset-1">
-                            <br>
-                            <input type="button" class='btn btn-finish btn-primary' onclick="window.location.href='/admin/add-new'" value="Añadir" />
+                        <div class="col-sm-10 col-sm-offset-1 ">
+                            <p><small>*Recordatorio:<br>
+                                 Para eliminar una propiedad, tendrá que ponerla previamente en estado "No disponible" mediante la edición. Posteriormente, desde este panel, podrá volver cambiar de nuevo el estado o eliminarla de forma definitiva. </small></p>
+                            <h4 class="s-property-title">Gestión</h4>
+                            <div class="col text-center">
+                                <a onclick="window.location.href='/admin/add-new'">Añadir nueva propiedad</a>
+                            </div>
                         </div>
+
+                        <div class="col-sm-10 col-sm-offset-1">
+                            <div class="section additional-details">
+                                <h4 class="s-property-title">Resumen</h4>
+                                <ul class="additional-details-list clearfix">
+                                    <li>
+                                        <span class="col-xs-6 col-sm-4 col-md-4 add-d-title">Propiedades</span>
+                                        <span class="col-xs-6 col-sm-8 col-md-8 add-d-entry"><%= properties.length %></span>
+                                    </li>
+                                    <li>
+                                        <span class="col-xs-6 col-sm-4 col-md-4 add-d-title">Apartamentos</span>
+                                        <span class="col-xs-6 col-sm-8 col-md-8 add-d-entry"><%= apartments.length %></span>
+                                    </li>
+                                    <li>
+                                        <span class="col-xs-6 col-sm-4 col-md-4 add-d-title">Hoteles</span>
+                                        <span class="col-xs-6 col-sm-8 col-md-8 add-d-entry"><%= hotels.length %></span>
+                                    </li>
+                                    <li>
+                                        <span class="col-xs-6 col-sm-4 col-md-4 add-d-title">Prop. "No disponible"</span>
+                                        <span class="col-xs-6 col-sm-8 col-md-8 add-d-entry"><%= noAvailableProperties.length %></span>
+                                    </li>
+                                    <li>
+                                        <span class="col-xs-6 col-sm-4 col-md-4 add-d-title">Reservas</span>
+                                        <span class="col-xs-6 col-sm-8 col-md-8 add-d-entry"><%= bookings.length %></span>
+                                    </li>
+    
+                                </ul>
+                            </div> 
+                        </div>
+
+                        <div class="col-sm-10 col-sm-offset-1">
+                            <h4 class="s-property-title">Propiedades en estado de "No disponible" (<%= noAvailableProperties.length %>)</h4>
+                            <ul>
+                                <%_ noAvailableProperties.forEach( property => { %>  
+                                    <li>
+                                        id: <i><%= property._id %></i> | título: <i><%= property.title %></i> | tipo: <i><%= property.__t %></i> <br>
+                                        <a onclick="window.location.href='/admin/edit/<%=property._id%>'">Editar</a> /
+                                        <a  data-toggle="modal" data-target="#alertDeleteProperty">Eliminar</a>
+                                    </li>
+                                    <!-- Modal -->
+                                    <div class="modal" tabindex="-1" role="dialog" id="alertDeleteProperty">
+                                        <div class="modal-dialog" role="document">
+                                          <div class="modal-content">
+                                            <div class="modal-header">
+                                              <h5 class="modal-title">Eliminar</h5>
+                                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                              </button>
+                                            </div>
+                                            <div class="modal-body">
+                                              <p>Está seguro que quiere eliminar el alojamiento </p><%= property._id %> ?
+                                            </div>
+                                            <div class="modal-footer">
+                                              <button onclick="window.location.href='/admin/delete/<%= property._id %>'" type="button" class="btn btn-primary">Eliminar</button>
+                                              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                                            </div>
+                                          </div>
+                                        </div>
+                                    </div>
+                                <!-- End Modal -->
+                                <%_ }) %> 
+                            </ul>
+                        </div>
+
+
+                        <div class="col-sm-10 col-sm-offset-1 ">
+                            <h4 class="s-property-title">Reservas (<%= bookings.length %>) </h4>
+                            <ul>
+                                <%_ bookings.forEach( booking => { %>  
+                                    <li>
+                                        id: <i><%= booking._id %></i> | <br> <%- booking.user ? `usuario: <i>${booking.user.username}</i>` : "usuario: <i>No existe</i>" %> 
+                                        | <%- booking.property && booking.property ==! undefined  ? `propiedad: <i>${booking.property.title}</i>` : "propiedad: <i>No existe</i>"%> | check-in: <i><%= new Date(booking.checkIn).toDateString() %></i> - check-out: <i><%= new Date(booking.checkOut).toDateString()%></i><br>                                  
+                                        <a data-toggle="modal" data-target="#alertDeleteBooking">Eliminar</a>
+                                    </li>
+                                    <!-- Modal -->
+                                        <div class="modal" tabindex="-1" role="dialog" id="alertDeleteBooking">
+                                            <div class="modal-dialog" role="document">
+                                              <div class="modal-content">
+                                                <div class="modal-header">
+                                                  <h5 class="modal-title">Eliminar</h5>
+                                                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                  </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                  <p>Está seguro que quiere eliminar la reserva </p><%= booking._id %> ?
+                                                </div>
+                                                <div class="modal-footer">
+                                                  <button onclick="window.location.href='/booking/<%= booking._id %>/delete'" type="button" class="btn btn-primary">Eliminar</button>
+                                                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                                                </div>
+                                              </div>
+                                            </div>
+                                        </div>
+                                    <!-- End Modal -->
+                                <%_ })  %> 
+                            </ul>
+                        </div>
+
+
 
                 </div>
             </div><!-- end row -->
@@ -51,7 +154,7 @@
         </div>
     </div>
 
-
+    
     <footer>
         <%- include("../../components/footer") %> 
     </footer>

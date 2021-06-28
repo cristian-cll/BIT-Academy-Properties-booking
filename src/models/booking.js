@@ -11,7 +11,8 @@ const bookingSchema = new Schema({
       required: true
     },
     user: { type: Schema.Types.ObjectId, ref: 'User' },
-    property: { type: Schema.Types.ObjectId, ref: 'Property' }
+    property: { type: Schema.Types.ObjectId, ref: 'Property' },
+    created_at: { type: Date, default: Date.now()},
   });
 
   //Asociamos la collección "Booking" con el modelo "bookingSchema"

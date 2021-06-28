@@ -10,8 +10,9 @@ const BaseSchema = function() {
         title: { type: String, required: false },
         price: { type: Number, default: 0 },
         currency: { type: String, default: "EUR" },
-        availability: { type: String, default: "Disponible" },
-        booked: { type: Boolean, default: false },
+        capacity: { type: Number, require: true},
+        availability: { type: String, enum: ["Disponible", "No disponible"]},
+        capacity: {type: Number, default: 1},
         owner: String,
         phone: { type: Number },
         description: String,
@@ -19,14 +20,16 @@ const BaseSchema = function() {
             street: String,
             city: String,
             district: String,
+            latitude: String,
+            longitude: String
         },
+        area:{ type: Number},
         created_at: { type: Date, default: Date.now()},
-        rules: String,
         amenities: {
             air_conditioner: { type: Boolean, default: false },
             heating: { type: Boolean, default: false },
             wc_private: { type: Boolean, default: false },
-            wasch_maschine: { type: Boolean, default: false },
+            wash_machine: { type: Boolean, default: false },
             tv: { type: Boolean, default: false },
             wifi: { type: Boolean, default: false },
             dryer: { type: Boolean, default: false },
@@ -37,9 +40,28 @@ const BaseSchema = function() {
             interior_views: { type: Boolean, default: false },
             closet: { type: Boolean, default: false },
             emergency_exit: { type: Boolean, default: false },
-            fire_detector: { type: Boolean, default: false }             
+            fire_detector: { type: Boolean, default: false },
+            accessibility:  { type: Boolean, default: false },
+            kitchen: { type: Boolean, default: false }            
         },
+        rules:{
+            smoking: { type: Boolean, default: false },
+            pets: { type: Boolean, default: false },
+            noise: { type: Boolean, default: false },
+            invite: { type: Boolean, default: false },
+        },
+        //rule_extra: String,
 
+       main_photo: {
+           url: {type: String, require: true},
+           description: {type: String, require: true}
+       },
+       photos:[{
+           url: {type: String, require: true},
+           description: {type: String, require: true}
+       }],
+       video: String,
+       created_at: { type: Date, default: Date.now()},
     })
 }
 

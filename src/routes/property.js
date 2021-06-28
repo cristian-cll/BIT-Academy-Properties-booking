@@ -8,6 +8,4 @@ router.get("/:type/:id/:type-detail", propertyController.detail); //Detalle de l
 
 
 
-
-
 module.exports = router;
