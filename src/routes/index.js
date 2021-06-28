@@ -11,11 +11,5 @@ router.get("/about", indexController.about);
 
 router.get("/search/", indexController.search);
 
-//router.get("/search/:query/:page", indexController.search);
-
-//router.get("/search/", indexController.search);
-
-
-
 
 module.exports = router;
